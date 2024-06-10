@@ -32,3 +32,17 @@ class User(AbstractBaseUser):
 
     def __str__(self):
         return self.email
+
+class FriendRequest(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_requests')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_requests')
+    status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('accepted', 'Accepted'), ('rejected', 'Rejected')])
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def accept(self):
+        self.status = 'accepted'
+        self.save()
+
+    def reject(self):
+        self.status = 'rejected'
+        self.save()
