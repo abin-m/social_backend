@@ -19,7 +19,8 @@ class UserManager(BaseUserManager):
         return self.create_user(email, password, name, **extra_fields)
 
 class User(AbstractBaseUser):
-    email = models.EmailField(unique=True, primary_key=True)
+    id = models.AutoField(primary_key=True)
+    email = models.EmailField(unique=True)
     name = models.CharField(max_length=255, default="Unknown")
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -32,7 +33,7 @@ class User(AbstractBaseUser):
 
     def __str__(self):
         return self.email
-
+    
 class FriendRequest(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_requests')
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_requests')
